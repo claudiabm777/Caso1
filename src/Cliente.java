@@ -7,6 +7,9 @@ public class Cliente extends Thread{
 	//---------------------------------------------------------------------------------------------
 	//---------------------------------------------------------------------------------------------
 	
+	/**
+	 * Arreglo de mensajes que va a enviar el cliente
+	 */
 	private Mensaje[] mensajes;
 	private int numeroMensajes;
 	private Buffer buffer;

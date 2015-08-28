@@ -1,3 +1,8 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -152,9 +157,32 @@ public class Buffer {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Buffer buffer=new Buffer(20,6,1);
-		for(int i=0;i<buffer.numClientes;i++){
-			Cliente cliente=new Cliente(1,buffer);
+		
+		String infoClientes=null;
+		String cantidadServidores=null;
+		String tamanioBuffer=null;
+		String[]msjs=null;
+		FileReader fw;
+		try {
+			fw = new FileReader("data/datos.txt");
+		
+		BufferedReader bw = new BufferedReader(fw);
+		infoClientes=bw.readLine();
+		cantidadServidores=bw.readLine();
+		tamanioBuffer=bw.readLine();
+		msjs=infoClientes.split(":")[1].split(",");
+		
+		
+		bw.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		Buffer buffer=new Buffer(msjs.length,Integer.parseInt(cantidadServidores.split(":")[1]),Integer.parseInt(tamanioBuffer.split(":")[1]));
+		//System.out.println(msjs.length+" "+Integer.parseInt(cantidadServidores.split(":")[1])+" "+Integer.parseInt(tamanioBuffer.split(":")[1]));
+		for(int i=0;i<msjs.length;i++){
+			Cliente cliente=new Cliente(Integer.parseInt(msjs[i]),buffer);
 			buffer.clientes[i]=cliente;
 			buffer.clientes[i].start();
 		}
