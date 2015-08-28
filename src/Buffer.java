@@ -1,18 +1,67 @@
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Clase Buffer del Caso 1
+ * @author Asus
+ *
+ */
 public class Buffer {
 	
-	private int numClientes;
-	private int numServidores;
-	private int tamanioBuffer;
-	private List<Mensaje> mensajes;
-	private boolean finalizado;
-	private Cliente[] clientes;
-	private Servidor[] servidores;
-	//private boolean esperaServidor;
+	//---------------------------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------------
+	//Atributos------------------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------------
 	
+	/**
+	 * Número de clientes.
+	 */
+	private int numClientes;
+	
+	/**
+	 * Número de servidores.
+	 */
+	private int numServidores;
+	
+	/**
+	 * Tamaño del buffer. Número de mensajes que puede almacenar
+	 */
+	private int tamanioBuffer;
+	
+	/**
+	 * Esta es la lista que va a almacenar los mensajes que los clientes depositan en el buffer.
+	 * El tamaño de esta lista es la capacidad del buffer (tamanioBuffer). Esta lista es el buffer.
+	 */
+	private List<Mensaje> mensajes;
+	
+	/**
+	 * Indica si ya se terminaron de procesar todos los clientes 
+	 * (TRUE si ya se termino, FALSE de lo contrario)
+	 */
+	private boolean finalizado;
+	
+	/**
+	 * Arreglo de clientes que van a participar en el sistema
+	 */
+	private Cliente[] clientes;
+	
+	/**
+	 * Arreglo de servidores que van a participar en el sistema
+	 */
+	private Servidor[] servidores;
+	
+	//---------------------------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------------
+	//Constructor----------------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------------
+	/**
+	 * Constructor de la clase
+	 * @param numClientes: número de clientes del sistema
+	 * @param numServidores: numero de servidores del sistema
+	 * @param tamanioBuffer: capacidad de almacenaje de mensajes que va a tener el buffer
+	 */
 	public Buffer(int numClientes,int numServidores,int tamanioBuffer){
 		this.numClientes=numClientes;
 		this.numServidores=numServidores;
@@ -21,9 +70,21 @@ public class Buffer {
 		this.finalizado=false;
 		this.clientes=new Cliente[this.numClientes];
 		this.servidores=new Servidor[this.numServidores];
-		//esperaServidor=false;
+		
 	}
+
 	
+	//---------------------------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------------
+	//Métodos--------------------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------------
+	
+	/**
+	 * Método que recibe un mensaje del cliente y lo guarda en el buffer
+	 * @param mensaje: mensaje a guardar en el buffer, si no lo logra, queda esperando sobre el buffer
+	 * @return El mensaje guardado
+	 */
 	public synchronized Mensaje guardarMensaje(Mensaje mensaje){
 		while(mensajes.size()==tamanioBuffer){
 			try {
@@ -36,11 +97,13 @@ public class Buffer {
 		}
 		mensajes.add(mensaje);
 		
-		System.out.println("Mensaje guardado: "+mensaje.getNumMensaje());
-		
+		System.out.println("Mensaje guardado: "+mensaje.getNumMensaje());		
 		return mensaje;
 	}
-	
+	/**
+	 * Método que saca el mensaje del buffer e incrementa este mensaje en 1
+	 * @return un entero con el nuevo valor del mensaje
+	 */
 	public  Integer obtenerMensaje(){
 		Integer respuesta=null;
 		if(mensajes.size()==0){
@@ -59,6 +122,10 @@ public class Buffer {
 		return respuesta;
 	}
 	
+	/**
+	 * Método que determina si se terminaron de procesar los clientes
+	 * @return un booleano indicando si ya se atendieron a todos los clientes (TRUE) o no (FALSE)
+	 */
 	public  boolean seTerminoProcesarClientes(){
 		synchronized(clientes){
 		int contadorClientes=0;
@@ -74,10 +141,20 @@ public class Buffer {
 		}
 	}
 	
+	//---------------------------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------------
+	//Main-----------------------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------------
+	
+	/**
+	 * MAIN del programa
+	 * @param args
+	 */
 	public static void main(String[] args) {
-		Buffer buffer=new Buffer(2,6,1);
+		Buffer buffer=new Buffer(20,6,1);
 		for(int i=0;i<buffer.numClientes;i++){
-			Cliente cliente=new Cliente(15,buffer);
+			Cliente cliente=new Cliente(1,buffer);
 			buffer.clientes[i]=cliente;
 			buffer.clientes[i].start();
 		}
