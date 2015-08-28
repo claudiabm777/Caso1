@@ -15,7 +15,7 @@ public class Cliente extends Thread{
 		atendido=false;
 	}
 
-	public boolean revisarEstadoMensajes(){
+	public  boolean revisarEstadoMensajes(){
 		int contador=0;
 		for(int i=0;i<mensajes.length;i++){
 			if(mensajes[i].getProcesado()){
@@ -30,9 +30,10 @@ public class Cliente extends Thread{
 	public void run(){
 		Mensaje guardado=null;
 		for(int i=0;i<mensajes.length;i++){
-			guardado=buffer.guardarMensaje(mensajes[i]);
-			synchronized(guardado){try {
-				guardado.wait();
+			synchronized(mensajes[i]){try {
+			buffer.guardarMensaje(mensajes[i]);
+			
+			mensajes[i].wait();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

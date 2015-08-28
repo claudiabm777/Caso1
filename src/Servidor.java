@@ -9,13 +9,33 @@ public class Servidor extends Thread{
 	
 	
 	public void run(){
+
 		Integer respuesta=null;
+		boolean salir=false;
 		synchronized(buffer){
-			 respuesta=buffer.obtenerMensaje();}
-			while(respuesta==null){
-				yield();
-				synchronized(buffer){respuesta=buffer.obtenerMensaje();
+			boolean r=buffer.seTerminoProcesarClientes();
+			//System.out.println("Se acabaron de procesar clientes? "+r);
+			if(!r){
+				respuesta=buffer.obtenerMensaje();
 			}
 		}
+		
+		while(!salir){
+			yield();
+			synchronized(buffer){
+				//System.out.println("[2] Se acabaron de procesar clientes? "+buffer.seTerminoProcesarClientes());
+				if(!buffer.seTerminoProcesarClientes()){
+					respuesta=buffer.obtenerMensaje();
+					//System.out.println("Mensaje que se obtubo resp: "+respuesta+" - "+salir);
+				}
+				else{
+					salir=true;
+					//System.out.println("[2] Mensaje que se obtubo resp: "+respuesta+" - "+salir);
+				}
+
+			}
+
+		}
+
 	}
 }
