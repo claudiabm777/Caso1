@@ -54,20 +54,19 @@ public class Servidor extends Thread{
 			synchronized(buffer)
 			{
 				//System.out.println("[2] Se acabaron de procesar clientes? "+buffer.seTerminoProcesarClientes());
+				// Si no se ha terminado de procesar todos los clientes se continua obteniendo sus mensajes
 				if(!buffer.seTerminoProcesarClientes())
 				{
 					respuesta=buffer.obtenerMensaje();
 					//System.out.println("Mensaje que se obtubo resp: "+respuesta+" - "+salir);
 				}
+				// De lo contrario se avisa que ya se ha acabado. y se termina el procrso del servidor
 				else
 				{
 					salir=true;
 					//System.out.println("[2] Mensaje que se obtubo resp: "+respuesta+" - "+salir);
 				}
-
 			}
-
 		}
-
 	}
 }
