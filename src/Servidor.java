@@ -32,7 +32,6 @@ public class Servidor extends Thread{
 	 * <b>post: </b> EL Servidor . <br>
 	 */
 	public void run(){
-
 		//se crean  una bandera, para saber cuando es necesario de dejar de correr el servidor
 		boolean salir=false;
 		// se crea un entero Obj para saber 
@@ -65,7 +64,10 @@ public class Servidor extends Thread{
 					salir=true;
 					//System.out.println("[2] Mensaje que se obtubo resp: "+respuesta+" - "+salir);
 				}
+
 			}
+
 		}
+
 	}
 }
